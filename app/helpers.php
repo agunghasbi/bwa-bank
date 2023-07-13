@@ -2,6 +2,9 @@
 
 use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Facades\Storage;
+use Melihovv\Base64ImageDecoder\Base64ImageDecoder;
+use Illuminate\Support\Str;
 
 function getUser($param)
 {
@@ -29,4 +32,16 @@ function pinChecker($pin)
 
     if ($wallet->pin == $pin) return true;
     return false;
+}
+
+function uploadBase64Image($base64Image)
+{
+    $decoder = new Base64ImageDecoder($base64Image, $allowedFormats = ['jpeg', 'png', 'jpg']);
+
+    $decodedContent = $decoder->getDecodedContent();
+    $format = $decoder->getFormat();
+    $image = Str::random(10) . '.' . $format;
+    Storage::disk('public')->put($image, $decodedContent);
+
+    return $image;
 }
