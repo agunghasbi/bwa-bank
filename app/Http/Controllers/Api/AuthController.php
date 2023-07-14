@@ -118,6 +118,13 @@ class AuthController extends Controller
         }
     }
 
+    public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['message' => "Logout Success"]);
+    }
+
     private function generateCardNumber($length)
     {
         $result = "";
